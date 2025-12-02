@@ -9,14 +9,16 @@ import backtrader as bt
 
 class EMA(bt.Strategy):
     def __init__(self):
-        self.ema5 = bt.indicators.ExponentialMovingAverage(self.data.close, period=5)
+        self.ema5 = bt.indicators.ExponentialMovingAverage(self.data.close, period=5) 
+            #exponential moving average是指数移动平均线，和SMA的区别是EMA对最新的数据更敏感，计算方法是加权平均
         self.ema20 = bt.indicators.ExponentialMovingAverage(self.data.close, period=20)
         self.crossover = bt.indicators.CrossOver(self.ema5, self.ema20)
+            #crossover指标用于检测两条均线的交叉情况，当短期均线上穿长期均线时，返回1；当短期均线下穿长期均线时，返回-1；否则返回0
 
     def next(self):
         if not self.position:
-            if (self.ema5[0] > self.ema20[0] and self.ema5[-1] <= self.ema20[-1]
-                    or self.crossover[0] == 1 or self.data.close[0] > self.crossover[0]):
+            if (self.ema5[0] > self.ema20[0] and self.ema5[-1] <= self.ema20[-1] # 判断5日均线上穿20日均线
+                    or self.crossover[0] == 1 or self.data.close[0] > self.crossover[0]): # 判断crossover指标是否为1或收盘价是否高于crossover值
                 self.buy()
         elif (self.ema5[0] < self.ema20[0] and self.ema5[-1] >= self.ema20[-1]
               or self.crossover[0] == -1 or self.data.close[0] < self.crossover[0]):

@@ -70,7 +70,7 @@ for symbol in symbols:
         # 保存到 Excel
         # 每个股票单独一个文件，包含两个 Sheet (Calls / Puts)
         # -----------------------------
-        output_file = f"{symbol}_options.xlsx"
+        output_file = f"{symbol}_options_{today.strftime('%Y-%m-%d')}.xlsx"
         with pd.ExcelWriter(output_file) as writer:
             calls.reset_index().to_excel(writer, sheet_name='Calls', index=False)
             puts.reset_index().to_excel(writer, sheet_name='Puts', index=False)
